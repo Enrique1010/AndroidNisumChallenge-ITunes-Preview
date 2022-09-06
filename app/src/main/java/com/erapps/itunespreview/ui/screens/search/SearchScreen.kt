@@ -14,6 +14,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.erapps.itunespreview.data.models.Album
 
@@ -32,7 +33,9 @@ fun SearchScreen(
     ) {
         SearchBar(text = text) { viewModel.updateSearchText(it) }
         viewModel.getAlbums()
-        if (list.itemCount == 0) LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+        /*if (list.loadState.refresh is LoadState.Loading && !list.loadState.append.endOfPaginationReached) {
+            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+        }*/
         AlbumsList(modifier = Modifier.padding(start = 16.dp, end = 16.dp), list = list) {
             onAlbumClick(it)
         }

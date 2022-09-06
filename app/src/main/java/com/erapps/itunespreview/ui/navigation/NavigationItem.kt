@@ -20,20 +20,7 @@ sealed class NavigationItem(
     object LandingPage: NavigationItem("landing_page")
     // search navigation
     object Search: NavigationItem("search")
-    object AlbumDetails: NavigationItem("album_details") {
-        fun createRoute(
-            albumImageUrl: String,
-            albumName: String,
-            artistName: String,
-            albumId: Long
-        ) = "$baseRoute/$albumImageUrl/$albumName/$artistName/$albumId"
-    }
+    object AlbumDetails: NavigationItem("album_details")
 }
 
-enum class NavArgs(val key: String, val navType: NavType<*>) {
-    //Album Details Arguments
-    AlbumImageURL("album_image_url", NavType.StringType),
-    AlbumName("album_name", NavType.StringType),
-    ArtistName("artist_name", NavType.StringType),
-    AlbumId("album_id", NavType.LongType)
-}
+enum class NavArgs(val key: String, val navType: NavType<*>) {}

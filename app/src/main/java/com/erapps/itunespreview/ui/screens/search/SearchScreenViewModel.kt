@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.erapps.itunespreview.data.models.Album
 import com.erapps.itunespreview.data.source.remote.search.ISearchRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -32,6 +33,7 @@ class SearchScreenViewModel @Inject constructor(
     fun getAlbums() = viewModelScope.launch {
         //val query = term.replace(" ", "+")
         searchRepository.getAlbumsByTerm(_termQuery.value)
+            .cachedIn(viewModelScope)
             .collect { albums ->
                 _albumListState.update { albums }
             }

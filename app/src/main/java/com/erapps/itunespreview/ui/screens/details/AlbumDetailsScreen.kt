@@ -6,55 +6,65 @@ import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.erapps.itunespreview.R
+import com.erapps.itunespreview.data.models.Album
+import com.erapps.itunespreview.data.models.Song
+import com.erapps.itunespreview.ui.shared.SharedViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun AlbumDetailsScreen(
-    album: AlbumDetailsItem,
+    sharedViewModel: SharedViewModel,
     onPopup: () -> Unit
 ) {
     val scaffoldState = rememberBottomSheetScaffoldState()
 
+    val album = sharedViewModel.album
+
     BottomSheetScaffold(
         sheetContent = {
             SongPreview(
-                collectionName = album.albumName,
-                audioDataSource =
-                "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/99/3a/92/993a9275-10d0-1be8-58d5-17607497e48d/mzaf_10635522880453166317.plus.aac.p.m4a"
+                collectionName = album!!.collectionName,
+                imageUrl = album.artworkUrl100,
+                audioDataSource = ""
             )
         },
         scaffoldState = scaffoldState,
         sheetGesturesEnabled = false,
         sheetShape = RectangleShape
     ) {
-        DetailsContent(album = album)
+        DetailsContent(album = album!!)
     }
 }
 
 @Composable
 fun DetailsContent(
     modifier: Modifier = Modifier,
-    album: AlbumDetailsItem
+    album: Album
 ) {
+    val context = LocalContext.current
+
     Surface {
         Column {
             Box(
@@ -63,18 +73,28 @@ fun DetailsContent(
                     .fillMaxHeight(0.30f),
                 contentAlignment = Alignment.TopCenter
             ) {
-                Icon(
+                AsyncImage(
+                    model = ImageRequest.Builder(context)
+                        .data(album.artworkUrl100)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = album.artistName,
+                    alignment = Alignment.TopCenter,
+                    modifier = Modifier.fillMaxWidth(),
+                    contentScale = ContentScale.Crop
+                )
+                /*Icon(
                     modifier = modifier.size(200.dp, 200.dp),
                     imageVector = Icons.Default.Home,
                     contentDescription = null
-                )
+                )*/
             }
             Spacer(modifier = modifier.height(4.dp))
             Column(
                 modifier = modifier.padding(16.dp)
             ) {
                 Text(
-                    text = album.albumName,
+                    text = album.collectionName,
                     fontWeight = FontWeight.Bold,
                     fontSize = 20.sp
                 )
@@ -94,9 +114,30 @@ fun DetailsContent(
 }
 
 @Composable
+fun songsList(
+    viewModel: AlbumDetailsViewModel = hiltViewModel(),
+    albumId: Long
+) {
+    val list = viewModel.songListState.collectAsState()
+    viewModel.getSongByAlbumId(albumId)
+
+    LazyColumn {
+        items(list.value){ item ->
+
+        }
+    }
+}
+
+@Composable
+fun SongListItem(song: Song) {
+
+}
+
+@Composable
 fun SongPreview(
     modifier: Modifier = Modifier,
     collectionName: String,
+    imageUrl: String,
     audioDataSource: String
 ) {
     val context = LocalContext.current
@@ -112,8 +153,8 @@ fun SongPreview(
 
     val isPlaying by remember { mutableStateOf(mediaPlayer.isPlaying) }
     mediaPlayer.apply {
-        setDataSource(LocalContext.current, Uri.parse(audioDataSource))
-        prepare()
+//        setDataSource(LocalContext.current, Uri.parse(audioDataSource))
+//        prepare()
     }
 
     Column(
@@ -124,12 +165,22 @@ fun SongPreview(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
+            AsyncImage(
+                model = ImageRequest.Builder(context)
+                    .data(imageUrl)
+                    .crossfade(true)
+                    .build(),
+                contentDescription = null,
+                alignment = Alignment.TopCenter,
+                modifier = Modifier.size(24.dp, 24.dp),
+                contentScale = ContentScale.Crop
+            )
+            /*Image(
                 modifier = modifier.padding(start = 8.dp),
                 painter = painterResource(id = R.drawable.ic_music_preview_logo),
                 contentDescription = null
-            )
-            Text(text = "preview of $collectionName")
+            )*/
+            Text(text = collectionName)
             IconButton(
                 onClick = {
                     if (isPlaying) run {
@@ -164,12 +215,12 @@ fun SongPreview(
 @Composable
 @Preview(showBackground = true, showSystemUi = true)
 fun AlbumDetailsScreenPreview() {
-    AlbumDetailsScreen(
+    /*AlbumDetailsScreen(
         album = AlbumDetailsItem(
             "",
             "Thriller",
             "MJ",
             0
         )
-    ){}
+    ){}*/
 }
