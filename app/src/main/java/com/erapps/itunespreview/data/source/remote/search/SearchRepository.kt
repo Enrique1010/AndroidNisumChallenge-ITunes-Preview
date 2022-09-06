@@ -1,4 +1,4 @@
-package com.erapps.itunespreview.data.source.remote
+package com.erapps.itunespreview.data.source.remote.search
 
 import androidx.paging.PagingData
 import com.erapps.itunespreview.data.models.Album

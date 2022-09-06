@@ -5,7 +5,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -19,7 +20,7 @@ import com.erapps.itunespreview.data.models.Album
 @Composable
 fun SearchScreen(
     viewModel: SearchScreenViewModel = hiltViewModel(),
-    onAlbumClick: (Album) -> Unit
+    onAlbumClick: (Album?) -> Unit
 ) {
     val list = viewModel.albumListState.collectAsLazyPagingItems()
     val text by viewModel.termQuery

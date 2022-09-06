@@ -1,14 +1,10 @@
 package com.erapps.itunespreview.ui.screens.search
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -28,7 +24,7 @@ import com.erapps.itunespreview.data.models.Album
 fun AlbumsList(
     modifier: Modifier = Modifier,
     list: LazyPagingItems<Album>,
-    onCardCLick: (Album) -> Unit
+    onCardCLick: (Album?) -> Unit
 ) {
 
     LazyVerticalGrid(
@@ -38,7 +34,7 @@ fun AlbumsList(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         items(list.itemCount) { i ->
-            AlbumItem(album = list[i]) { onCardCLick(list[i]!!) }
+            AlbumItem(album = list[i]) { onCardCLick(list[i]) }
         }
     }
 }
@@ -69,8 +65,7 @@ fun AlbumItem(
                     .build(),
                 contentDescription = album?.artistName,
                 alignment = Alignment.TopCenter,
-                modifier = Modifier
-                    .size(204.dp, 164.dp),
+                modifier = Modifier.fillMaxWidth(),
                 contentScale = ContentScale.Crop
             )
             Column(

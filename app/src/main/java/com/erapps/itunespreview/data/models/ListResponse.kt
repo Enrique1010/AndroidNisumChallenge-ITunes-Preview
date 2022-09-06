@@ -1,6 +1,6 @@
 package com.erapps.itunespreview.data.models
 
-data class ListResponse(
+data class ListResponse<T>(
     val resultCount: Int,
-    val results: List<Album>
+    val results: List<T>
 )

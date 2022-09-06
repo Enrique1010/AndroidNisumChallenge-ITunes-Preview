@@ -4,6 +4,5 @@ data class AlbumDetailsItem(
     val imageURL: String,
     val albumName: String,
     val artistName: String,
-    val songsCount: Int,
-    val previewSoundUrl: String
+    val albumId: Long
 )

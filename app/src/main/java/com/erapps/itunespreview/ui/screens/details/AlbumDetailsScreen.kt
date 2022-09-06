@@ -28,7 +28,10 @@ import com.erapps.itunespreview.R
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun AlbumDetailsScreen(album: AlbumDetailsItem) {
+fun AlbumDetailsScreen(
+    album: AlbumDetailsItem,
+    onPopup: () -> Unit
+) {
     val scaffoldState = rememberBottomSheetScaffoldState()
 
     BottomSheetScaffold(
@@ -83,9 +86,9 @@ fun DetailsContent(
         }
         Spacer(modifier = modifier.height(4.dp))
         LazyColumn {
-            items(album.songsCount) { item ->
+            /*items(album.albumId.toInt()) { item ->
                 Text(text = "Song $item")
-            }
+            }*/
         }
     }
 }
@@ -166,8 +169,7 @@ fun AlbumDetailsScreenPreview() {
             "",
             "Thriller",
             "MJ",
-            0,
-            ""
+            0
         )
-    )
+    ){}
 }

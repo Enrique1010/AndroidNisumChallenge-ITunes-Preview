@@ -1,10 +1,10 @@
 package com.erapps.itunespreview.di
 
 import com.erapps.itunespreview.data.api.service.ITunesApiService
-import com.erapps.itunespreview.data.source.remote.ISearchRemoteDataSource
-import com.erapps.itunespreview.data.source.remote.ISearchRepository
-import com.erapps.itunespreview.data.source.remote.SearchRemoteDataSource
-import com.erapps.itunespreview.data.source.remote.SearchRepository
+import com.erapps.itunespreview.data.source.remote.search.ISearchRemoteDataSource
+import com.erapps.itunespreview.data.source.remote.search.ISearchRepository
+import com.erapps.itunespreview.data.source.remote.search.SearchRemoteDataSource
+import com.erapps.itunespreview.data.source.remote.search.SearchRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

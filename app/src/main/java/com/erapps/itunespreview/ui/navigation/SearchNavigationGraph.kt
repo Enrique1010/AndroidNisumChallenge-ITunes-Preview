@@ -13,20 +13,40 @@ import com.erapps.itunespreview.ui.screens.search.SearchScreen
 @Composable
 fun SearchNavigationGraph(navController: NavHostController) {
 
-    NavHost(navController = navController, startDestination = NavigationItem.Search.route){
+    NavHost(navController = navController, startDestination = NavigationItem.Search.route) {
         composable(NavigationItem.Search) {
-            SearchScreen(){
-
+            SearchScreen { album ->
+                navController.navigate(
+                    NavigationItem.AlbumDetails.createRoute(
+                        albumImageUrl = album!!.artworkUrl100,
+                        albumName = album.collectionName,
+                        artistName = album.artistName,
+                        albumId = album.collectionId.toLong()
+                    )
+                )
             }
         }
-        composable(NavigationItem.AlbumDetails) {
-            AlbumDetailsScreen(AlbumDetailsItem(
-                imageURL = "",
-                artistName = "",
-                albumName = "",
-                songsCount = 0,
-                previewSoundUrl = ""
-            ))
+        composable(NavigationItem.AlbumDetails) { entry ->
+
+            val albumImageUrl = entry.arguments?.getString(NavArgs.AlbumImageURL.key)
+            val albumName = entry.arguments?.getString(NavArgs.AlbumName.key)
+            val artistName = entry.arguments?.getString(NavArgs.ArtistName.key)
+            val albumId = entry.arguments?.getLong(NavArgs.AlbumId.key)
+            requireNotNull(albumImageUrl)
+            requireNotNull(albumName)
+            requireNotNull(artistName)
+            requireNotNull(albumId)
+
+            AlbumDetailsScreen(
+                AlbumDetailsItem(
+                    imageURL = albumImageUrl,
+                    albumName = albumName,
+                    artistName = artistName,
+                    albumId = albumId
+                )
+            ) {
+                navController.popBackStack()
+            }
         }
     }
 }

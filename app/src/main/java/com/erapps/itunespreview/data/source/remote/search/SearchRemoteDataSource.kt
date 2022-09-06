@@ -1,4 +1,4 @@
-package com.erapps.itunespreview.data.source.remote
+package com.erapps.itunespreview.data.source.remote.search
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig

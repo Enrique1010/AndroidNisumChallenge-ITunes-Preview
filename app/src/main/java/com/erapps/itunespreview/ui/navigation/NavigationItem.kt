@@ -15,17 +15,25 @@ sealed class NavigationItem(
     val args = navArgs.map { navArgument(name = it.key) { type = it.navType } }
 
     //navigation objects
-    //main nav
+    //main navigation
     object Splash: NavigationItem("splash")
     object LandingPage: NavigationItem("landing_page")
-    // search nav
+    // search navigation
     object Search: NavigationItem("search")
-    object AlbumDetails: NavigationItem("album_details")
+    object AlbumDetails: NavigationItem("album_details") {
+        fun createRoute(
+            albumImageUrl: String,
+            albumName: String,
+            artistName: String,
+            albumId: Long
+        ) = "$baseRoute/$albumImageUrl/$albumName/$artistName/$albumId"
+    }
 }
 
 enum class NavArgs(val key: String, val navType: NavType<*>) {
-    /*ImageURL(),
-    AlbumName(),
-    ArtistName(),
-    SongsList()*/
+    //Album Details Arguments
+    AlbumImageURL("album_image_url", NavType.StringType),
+    AlbumName("album_name", NavType.StringType),
+    ArtistName("artist_name", NavType.StringType),
+    AlbumId("album_id", NavType.LongType)
 }
