@@ -7,7 +7,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.erapps.itunespreview.ui.screens.details.AlbumDetailsItem
 import com.erapps.itunespreview.ui.screens.details.AlbumDetailsScreen
 import com.erapps.itunespreview.ui.screens.search.SearchScreen
 import com.erapps.itunespreview.ui.shared.SharedViewModel
@@ -28,7 +27,6 @@ fun SearchNavigationGraph(navController: NavHostController) {
             AlbumDetailsScreen(
                 sharedViewModel = sharedViewModel
             ) {
-                sharedViewModel.clearPerson()
                 navController.popBackStack()
             }
         }

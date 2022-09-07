@@ -3,13 +3,12 @@ package com.erapps.itunespreview.ui.screens.details
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.net.Uri
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.runtime.*
@@ -18,18 +17,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.erapps.itunespreview.R
 import com.erapps.itunespreview.data.models.Album
 import com.erapps.itunespreview.data.models.Song
+import com.erapps.itunespreview.ui.shared.MarqueeText
 import com.erapps.itunespreview.ui.shared.SharedViewModel
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -45,32 +42,47 @@ fun AlbumDetailsScreen(
     BottomSheetScaffold(
         sheetContent = {
             SongPreview(
-                collectionName = album!!.collectionName,
+                collectionName = album!!.collectionName.ifEmpty { "klk" },
                 imageUrl = album.artworkUrl100,
+                artistName = album.artistName,
                 audioDataSource = ""
             )
         },
         scaffoldState = scaffoldState,
-        sheetGesturesEnabled = false,
+        sheetGesturesEnabled = true,
         sheetShape = RectangleShape
     ) {
-        DetailsContent(album = album!!)
+        DetailsContent(album = album!!) { onPopup() }
     }
 }
 
 @Composable
 fun DetailsContent(
     modifier: Modifier = Modifier,
-    album: Album
+    album: Album,
+    onPopup: () -> Unit
 ) {
     val context = LocalContext.current
 
     Surface {
+        Row(
+            verticalAlignment = Alignment.Top,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            IconButton(
+                modifier = modifier,
+                onClick = { onPopup() }
+            ) {
+                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
+            }
+        }
+
         Column {
             Box(
                 modifier = modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.30f),
+                    .fillMaxWidth(0.6f)
+                    .fillMaxHeight(0.30f)
+                    .align(Alignment.CenterHorizontally),
                 contentAlignment = Alignment.TopCenter
             ) {
                 AsyncImage(
@@ -83,11 +95,6 @@ fun DetailsContent(
                     modifier = Modifier.fillMaxWidth(),
                     contentScale = ContentScale.Crop
                 )
-                /*Icon(
-                    modifier = modifier.size(200.dp, 200.dp),
-                    imageVector = Icons.Default.Home,
-                    contentDescription = null
-                )*/
             }
             Spacer(modifier = modifier.height(4.dp))
             Column(
@@ -103,45 +110,58 @@ fun DetailsContent(
                     fontWeight = FontWeight.Bold
                 )
             }
-        }
-        Spacer(modifier = modifier.height(4.dp))
-        LazyColumn {
-            /*items(album.albumId.toInt()) { item ->
-                Text(text = "Song $item")
-            }*/
+            Spacer(modifier = modifier.height(4.dp))
+            SongsList(albumId = album.collectionId.toLong())
         }
     }
 }
 
 @Composable
-fun songsList(
+fun SongsList(
+    modifier: Modifier = Modifier,
     viewModel: AlbumDetailsViewModel = hiltViewModel(),
     albumId: Long
 ) {
     val list = viewModel.songListState.collectAsState()
+    val mutableList: MutableList<Song> = mutableListOf()
+    mutableList.addAll(list.value)
     viewModel.getSongByAlbumId(albumId)
+    if (mutableList.isNotEmpty()) {
+        mutableList.removeFirst()
+    }
 
-    LazyColumn {
-        items(list.value){ item ->
-
+    LazyColumn(
+        modifier = modifier.padding(end = 8.dp, start = 8.dp),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        items(mutableList as List<Song>) { song ->
+            SongListItem(song = song)
         }
     }
 }
 
 @Composable
 fun SongListItem(song: Song) {
-
+    Divider()
+    SongPreview(
+        collectionName = song.trackName,
+        imageUrl = song.artworkUrl100,
+        artistName = song.artistName,
+        audioDataSource = song.previewUrl
+    )
+    Divider()
 }
 
 @Composable
 fun SongPreview(
     modifier: Modifier = Modifier,
     collectionName: String,
+    artistName: String,
     imageUrl: String,
     audioDataSource: String
 ) {
     val context = LocalContext.current
-    val progress by remember { mutableStateOf(.0f) }
     //setting media player
     val mediaPlayer = MediaPlayer()
     mediaPlayer.setAudioAttributes(
@@ -152,10 +172,6 @@ fun SongPreview(
     )
 
     val isPlaying by remember { mutableStateOf(mediaPlayer.isPlaying) }
-    mediaPlayer.apply {
-//        setDataSource(LocalContext.current, Uri.parse(audioDataSource))
-//        prepare()
-    }
 
     Column(
         verticalArrangement = Arrangement.Center
@@ -175,27 +191,20 @@ fun SongPreview(
                 modifier = Modifier.size(24.dp, 24.dp),
                 contentScale = ContentScale.Crop
             )
-            /*Image(
-                modifier = modifier.padding(start = 8.dp),
-                painter = painterResource(id = R.drawable.ic_music_preview_logo),
-                contentDescription = null
-            )*/
-            Text(text = collectionName)
+            Column {
+                MarqueeText(
+                    modifier = modifier.fillMaxWidth(0.8f),
+                    text = collectionName
+                )
+                Text(text = artistName, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+            }
             IconButton(
                 onClick = {
                     if (isPlaying) run {
-                        mediaPlayer.apply {
-                            stop()
-                            reset()
-                            release()
-                        }
+
 
                     } else run {
-                        mediaPlayer.apply {
-                            setDataSource(context, Uri.parse(audioDataSource))
-                            prepare()
-                            start()
-                        }
+
                     }
                 }
             ) {
@@ -205,10 +214,6 @@ fun SongPreview(
                 )
             }
         }
-        LinearProgressIndicator(
-            modifier = modifier.fillMaxWidth(),
-            progress = progress
-        )
     }
 }
 
