@@ -31,8 +31,8 @@ class SearchPagingSource(
 
             LoadResult.Page(
                 data = albums!!,
-                prevKey = null/*if (position == API_STARTING_PAGE_INDEX) null else position - 1*/,
-                nextKey = albums.lastOrNull()?.artistId
+                prevKey = null,
+                nextKey = null
             )
         } catch (exception: IOException) {
             return LoadResult.Error(exception)

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ITunes Preview</string>
+    <string name="notification_channel">channel_name</string>
+    <string name="notification_channel_description">channel_description</string>
+    <string name="generic_error">Unknown Error, try again later.</string>
+    <string name="error_media_not_found">No media found</string>
 </resources>

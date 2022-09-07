@@ -24,7 +24,7 @@ import com.erapps.itunespreview.data.models.Album
 fun AlbumsList(
     modifier: Modifier = Modifier,
     list: LazyPagingItems<Album>,
-    onCardCLick: (Album?) -> Unit
+    onCardCLick: (Album) -> Unit
 ) {
 
     LazyVerticalGrid(
@@ -34,7 +34,7 @@ fun AlbumsList(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         items(list.itemCount) { i ->
-            AlbumItem(album = list[i]) { onCardCLick(list[i]) }
+            AlbumItem(album = list[i]) { onCardCLick(list[i]!!) }
         }
     }
 }

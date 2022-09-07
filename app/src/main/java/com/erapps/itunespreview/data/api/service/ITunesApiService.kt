@@ -14,7 +14,7 @@ interface ITunesApiService {
         @Query("term") term: String,
         @Query("mediaType") mediaType: String = "music",
         @Query("entity") entity: String = "album",
-        @Query("limit") limit: Int
+        @Query("limit") limit: Int = 20
     ): NetworkResponse<ListResponse<Album>, *>
 
     @GET("lookup")

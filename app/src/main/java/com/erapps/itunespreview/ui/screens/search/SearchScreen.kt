@@ -5,6 +5,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -33,9 +34,6 @@ fun SearchScreen(
     ) {
         SearchBar(text = text) { viewModel.updateSearchText(it) }
         viewModel.getAlbums()
-        /*if (list.loadState.refresh is LoadState.Loading && !list.loadState.append.endOfPaginationReached) {
-            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
-        }*/
         AlbumsList(modifier = Modifier.padding(start = 16.dp, end = 16.dp), list = list) {
             onAlbumClick(it)
         }
@@ -82,7 +80,7 @@ private fun SearchBarIcon(
         onClick = { onClickIcon() }
     ) {
         Icon(
-            imageVector = Icons.Default.Close,
+            imageVector = Icons.Default.Search,
             contentDescription = "Close Icon",
             tint = MaterialTheme.colors.onBackground
         )

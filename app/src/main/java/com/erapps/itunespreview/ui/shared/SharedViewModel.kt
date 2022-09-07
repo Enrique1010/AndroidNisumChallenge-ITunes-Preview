@@ -14,8 +14,4 @@ class SharedViewModel : ViewModel() {
     fun addAlbum(addedAlbum: Album) {
         album = addedAlbum
     }
-
-    fun clearPerson(){
-        album = null
-    }
 }
