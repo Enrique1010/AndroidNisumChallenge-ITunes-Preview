@@ -1,4 +1,4 @@
-# AndroidNisumChallenge-ITunes-Preview
+# AndroidNisumChallenge ITunes Preview App
 App to consume the itunes api to display and play and search songs by author name.
 
 # Founded Issues
