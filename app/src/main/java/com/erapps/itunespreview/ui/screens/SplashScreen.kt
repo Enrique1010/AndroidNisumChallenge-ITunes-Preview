@@ -43,10 +43,6 @@ fun Splash(modifier: Modifier = Modifier) {
         ) {
             Icon(
                 modifier = modifier.size(96.dp, 96.dp),
-                /*colorFilter = ColorFilter.tint(
-                    color = MaterialTheme.colors.onBackground,
-                    blendMode = BlendMode.Color
-                ),*/
                 tint = MaterialTheme.colors.onBackground,
                 painter = painterResource(id = R.drawable.ic_music_preview_logo),
                 contentDescription = "splash"

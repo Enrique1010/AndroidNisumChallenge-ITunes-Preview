@@ -24,15 +24,15 @@ class SearchState(
             !focused && query.text.isEmpty() -> SearchDisplay.InitialResults
             focused && query.text.isEmpty() -> SearchDisplay.Suggestions
             searchResults.itemCount == 0 -> SearchDisplay.NoResults
-            else -> SearchDisplay.Results
+            searchResults.itemCount > 0 -> SearchDisplay.Results
+            else -> SearchDisplay.Loading
         }
 
     override fun toString(): String {
-        return "🚀 State query: $query, focused: $focused, searching: $searching " +
+        return "State query: $query, focused: $focused, searching: $searching " +
                 "suggestions: ${suggestions.size}, " +
                 "searchResults: ${searchResults}, " +
                 " searchDisplay: $searchDisplay"
-
     }
 }
 
