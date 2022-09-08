@@ -8,6 +8,7 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -33,12 +34,17 @@ fun BottomMediaContent(
     val song = viewModel.audioModel
     //media related
     var currentPosition by rememberSaveable { mutableStateOf(0L) }
-    val player = song?.let { generatePlayer(viewModel ,it.url) }
+    val player = song?.let { generatePlayer(viewModel, it.url) }
     val playerView = rememberPlayerViewWithLifecycle { currentPosition = it }
 
-    Column {
+    Column(
+        modifier = modifier.background(
+            color = Color.Transparent/*if (viewModel.audioModel == null) Color.Transparent else MaterialTheme.colors.background*/
+        )
+    ) {
         Row(
-            modifier = modifier.fillMaxWidth()
+            modifier = modifier
+                .fillMaxWidth()
                 .background(MaterialTheme.colors.background),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
@@ -61,19 +67,21 @@ fun BottomMediaContent(
                 song?.displayName?.let {
                     MarqueeText(
                         modifier = modifier.fillMaxWidth(0.8f),
-                        text = it
+                        text = it,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 12.sp
                     )
                 }
                 song?.artist?.let {
-                    Text(text = it, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                    Text(text = it, fontWeight = FontWeight.Bold, fontSize = 10.sp)
                 }
             }
         }
         PlayerContainer(
-                playerView = playerView,
-        player = player!!,
-        currentPosition = currentPosition,
-        modifier = modifier
+            playerView = playerView,
+            player = player!!,
+            currentPosition = currentPosition,
+            modifier = modifier
         )
     }
 }
@@ -132,6 +140,7 @@ private fun generatePlayer(viewModel: AudioViewModel, uri: String): ExoPlayer {
     val mediaItem = MediaItem.fromUri(uri)
     player.setMediaItem(mediaItem)
     player.prepare()
+    player.play()
     viewModel.addMediaPlayer(player)
     return player
 }

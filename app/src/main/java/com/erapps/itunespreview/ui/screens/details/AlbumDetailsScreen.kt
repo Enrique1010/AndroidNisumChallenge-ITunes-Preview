@@ -1,5 +1,6 @@
 package com.erapps.itunespreview.ui.screens.details
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,7 +14,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -40,10 +40,11 @@ fun AlbumDetailsScreen(
     audioViewModel: AudioViewModel = viewModel(),
     onPopup: () -> Unit
 ) {
-    val scaffoldState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    //val scaffoldState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    val scaffoldState = rememberBottomSheetScaffoldState()
     val album = sharedViewModel.album
 
-    ModalBottomSheetLayout(
+    BottomSheetScaffold(
         sheetContent = {
             Box(Modifier.defaultMinSize(minHeight = 1.dp)) {
                 if (audioViewModel.audioModel != null) {
@@ -51,23 +52,34 @@ fun AlbumDetailsScreen(
                 }
             }
         },
-        sheetState = scaffoldState,
-        scrimColor = Color.Transparent,
+        scaffoldState = scaffoldState,
+        //scrimColor = Color.Transparent,
         sheetShape = RectangleShape
     ) {
-        DetailsContent(album = album!!, scaffoldState = scaffoldState) { onPopup() }
+        DetailsContent(album = album!!, scaffoldState = scaffoldState) {
+            audioViewModel.clearSong()
+            onPopup()
+        }
     }
 
     //to handle clear media player when sheet is hide and initialize when is expanded
-    LaunchedEffect(scaffoldState.currentValue) {
-        when (scaffoldState.currentValue) {
+    LaunchedEffect(scaffoldState.bottomSheetState.currentValue) {
+        /*when (scaffoldState.bottomSheetState.currentValue) {
+            BottomSheetValue.Collapsed -> {
+                if (audioViewModel.audioModel != null) {
+                    audioViewModel.clearSong()
+                }
+            }
+            else -> {}
+        }*/
+        /*when (scaffoldState.currentValue) {
             ModalBottomSheetValue.Hidden -> {
                 if (audioViewModel.audioModel != null) {
                     audioViewModel.clearSong()
                 }
             }
             else -> {}
-        }
+        }*/
     }
 }
 
@@ -76,7 +88,7 @@ fun AlbumDetailsScreen(
 fun DetailsContent(
     modifier: Modifier = Modifier,
     album: Album,
-    scaffoldState: ModalBottomSheetState,
+    scaffoldState: BottomSheetScaffoldState,
     onPopup: () -> Unit
 ) {
     val context = LocalContext.current
@@ -138,7 +150,7 @@ fun DetailsContent(
 fun SongsList(
     modifier: Modifier = Modifier,
     viewModel: AlbumDetailsViewModel = hiltViewModel(),
-    scaffoldState: ModalBottomSheetState,
+    scaffoldState: BottomSheetScaffoldState,
     albumId: Long
 ) {
     val list = viewModel.songListState.collectAsState()
@@ -147,7 +159,9 @@ fun SongsList(
     val mutableList: MutableList<Song> = mutableListOf()
     mutableList.addAll(list.value)
     viewModel.getSongByAlbumId(albumId)
-    if (mutableList.isNotEmpty()) { mutableList.removeFirst() }
+    if (mutableList.isNotEmpty()) {
+        mutableList.removeFirst()
+    }
 
     if (mutableList.isEmpty()) {
         Column(
@@ -176,16 +190,19 @@ fun SongListItem(
     modifier: Modifier = Modifier,
     song: Song,
     viewModel: AudioViewModel = viewModel(),
-    scaffoldState: ModalBottomSheetState,
+    scaffoldState: BottomSheetScaffoldState,
 ) {
     val scope = rememberCoroutineScope()
 
-    Divider()
+    Spacer(modifier = modifier.height(2.dp))
     SongBox(
         collectionName = song.trackName,
         imageUrl = song.artworkUrl100,
         artistName = song.artistName
     ) {
+        if (viewModel.audioModel != null) {
+            viewModel.clearSong()
+        }
         viewModel.addSong(
             AudioModel(
                 url = song.previewUrl,
@@ -196,10 +213,10 @@ fun SongListItem(
             )
         )
         scope.launch {
-            scaffoldState.show()
+            scaffoldState.bottomSheetState.expand()
         }
     }
-    Divider(modifier = modifier.padding(4.dp))
+    Spacer(modifier = modifier.height(2.dp))
 }
 
 @Composable
@@ -213,7 +230,9 @@ fun SongBox(
     val context = LocalContext.current
 
     Column(
-        modifier = modifier.clickable { onPlayClicked() },
+        modifier = modifier
+            .clickable { onPlayClicked() }
+            .background(color = MaterialTheme.colors.onSecondary),
         verticalArrangement = Arrangement.Center
     ) {
         Row(
@@ -230,18 +249,18 @@ fun SongBox(
                 alignment = Alignment.TopCenter,
                 modifier = Modifier
                     .size(24.dp, 24.dp)
-                    .fillMaxWidth(0.2f)
-                    .padding(end = 8.dp),
+                    .padding(end = 8.dp, start = 8.dp),
                 contentScale = ContentScale.Crop
             )
             Column(
-                modifier = modifier.fillMaxWidth(0.8f)
+                modifier = modifier.fillMaxWidth()
             ) {
                 MarqueeText(
-                    modifier = modifier.fillMaxWidth(0.8f),
-                    text = collectionName
+                    modifier = modifier.fillMaxWidth(),
+                    text = collectionName,
+                    fontWeight = FontWeight.Bold
                 )
-                Text(text = artistName, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+                Text(text = artistName, fontWeight = FontWeight.Bold, fontSize = 10.sp)
             }
         }
     }
