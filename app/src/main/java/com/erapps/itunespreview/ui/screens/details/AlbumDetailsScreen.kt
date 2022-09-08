@@ -155,7 +155,7 @@ fun SongsList(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Ups!, no music to show.", fontSize = 16.sp)
+            Text(text = "Oops!, no music to show.", fontSize = 16.sp)
         }
         return
     }

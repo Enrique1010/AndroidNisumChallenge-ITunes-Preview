@@ -32,7 +32,7 @@ class SearchPagingSource(
             LoadResult.Page(
                 data = albums!!,
                 prevKey = null,
-                nextKey = null
+                nextKey = null //api without page number
             )
         } catch (exception: IOException) {
             return LoadResult.Error(exception)
