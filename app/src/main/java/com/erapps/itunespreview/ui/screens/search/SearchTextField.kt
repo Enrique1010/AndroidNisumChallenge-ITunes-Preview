@@ -3,6 +3,7 @@ package com.erapps.itunespreview.ui.screens.search
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
@@ -12,13 +13,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -30,20 +29,18 @@ import com.erapps.itunespreview.R
 import com.erapps.itunespreview.ui.screens.utils.TestTags.SEARCH_BAR_TAG
 import com.erapps.itunespreview.ui.screens.utils.TestTags.TRAILING_ICON_BUTTON_TAG
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SearchTextField(
     query: TextFieldValue,
     onQueryChange: (TextFieldValue) -> Unit,
     onSearchFocusChange: (Boolean) -> Unit,
-    searchByQuery: () -> Unit,
-    searching: Boolean,
+    searchByQuery: (String) -> Unit,
+    onKeyBoardSearchPress: KeyboardActionScope.() -> Unit,
     focused: Boolean,
     modifier: Modifier = Modifier
 ) {
 
     val focusRequester = remember { FocusRequester() }
-    val keyboardController = LocalSoftwareKeyboardController.current
 
     Surface(
         modifier = modifier
@@ -63,7 +60,7 @@ fun SearchTextField(
 
         CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
             Box(
-                contentAlignment = Alignment.CenterStart,
+                contentAlignment = Alignment.CenterEnd,
                 modifier = modifier
             ) {
 
@@ -83,16 +80,15 @@ fun SearchTextField(
                         modifier = Modifier
                             .fillMaxHeight()
                             .weight(1f)
-                            .onFocusChanged {
-                                onSearchFocusChange(it.isFocused)
-                            }
+                            .onFocusChanged { onSearchFocusChange(it.isFocused) }
                             .focusRequester(focusRequester)
                             .padding(
                                 top = dimensionResource(id = R.dimen.search_text_field_padding_end),
                                 bottom = dimensionResource(id = R.dimen.search_text_field_padding_end),
                                 start = dimensionResource(id = R.dimen.search_text_field_padding_16),
                                 end = dimensionResource(id = R.dimen.search_text_field_padding_end)
-                            ).testTag(SEARCH_BAR_TAG),
+                            )
+                            .testTag(SEARCH_BAR_TAG),
                         singleLine = true,
                         textStyle = TextStyle(
                             color = MaterialTheme.colors.onBackground
@@ -104,25 +100,19 @@ fun SearchTextField(
                             )
                         ),
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                        keyboardActions = KeyboardActions {
-                            if (query.text.isNotEmpty()) {
-                                keyboardController?.hide()
-                                searchByQuery()
-                            }
-                        }
+                        keyboardActions = KeyboardActions { onKeyBoardSearchPress() }
                     )
-
-                    if (query.text.isNotEmpty()) {
-                        IconButton(
-                            modifier = modifier.testTag(TRAILING_ICON_BUTTON_TAG),
-                            onClick = searchByQuery
-                        ) {
-                            Icon(
-                                imageVector = Icons.Filled.Search,
-                                contentDescription = null,
-                                tint = MaterialTheme.colors.onBackground
-                            )
-                        }
+                }
+                if (query.text.isNotEmpty()) {
+                    IconButton(
+                        modifier = modifier.testTag(TRAILING_ICON_BUTTON_TAG),
+                        onClick = { searchByQuery("") }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Search,
+                            contentDescription = null,
+                            tint = MaterialTheme.colors.onBackground
+                        )
                     }
                 }
             }

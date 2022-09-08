@@ -35,7 +35,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.lang.System.currentTimeMillis
 
-@OptIn(ExperimentalAnimationApi::class)
+@OptIn(ExperimentalAnimationApi::class, ExperimentalComposeUiApi::class)
 @Composable
 fun SearchScreen(
     viewModel: SearchScreenViewModel = hiltViewModel(),
@@ -44,6 +44,7 @@ fun SearchScreen(
     val scope = rememberCoroutineScope()
     val list = viewModel.albumListState.collectAsLazyPagingItems()
     val state = rememberSearchState(searchResults = list)
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     viewModel.getAlbums()
     state.searchResults = list
@@ -57,30 +58,32 @@ fun SearchScreen(
         SearchBar(
             modifier = Modifier,
             query = state.query,
-            onQueryChange = {
-                state.query = it
-            },
+            onQueryChange = { state.query = it },
             onSearchFocusChange = { state.focused = it },
             searchByQuery = {
-                viewModel.getSuggestions()
-                viewModel.updateSearchText(state.query.text)
-                viewModel.insertSuggestion(
-                    SuggestionModel(
-                        id = currentTimeMillis().toInt(),
-                        suggestion = state.query.text
-                    )
-                )
+                state.searching = false
+                if (state.query.text.isNotEmpty()) {
+                    keyboardController?.hide()
+                }
+                performQuerySearch(viewModel, state, it)
             },
-            onBack = { state.query = TextFieldValue(state.query.text) },
-            searching = state.searching,
+            onKeyBoardAction = {
+                state.searching = false
+                if (state.query.text.isNotEmpty()) {
+                    performQuerySearch(viewModel, state, "")
+                    keyboardController?.hide()
+                }
+            },
+            onBack = { state.query = TextFieldValue("") },
             focused = state.focused
         )
+
         when (state.searchDisplay) {
             SearchDisplay.InitialResults -> {
                 AlbumsList(list = state.searchResults) { onAlbumClick(it) }
             }
             SearchDisplay.NoResults -> {
-                NoResultsScreen()
+                WelcomeScreen()
             }
             SearchDisplay.Suggestions -> {
                 SuggestionsLayout(state = state, viewModel = viewModel)
@@ -128,7 +131,9 @@ fun LoadingScreen(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.fillMaxSize().testTag(CIRCULAR_PROGRESS_INDICATOR),
+        modifier = modifier
+            .fillMaxSize()
+            .testTag(CIRCULAR_PROGRESS_INDICATOR),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -178,32 +183,20 @@ private fun SuggestionsLayout(
     }
 }
 
-@Composable
-private fun NoResultsScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(dimensionResource(id = R.dimen.no_results_screen_column_padding)),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = stringResource(R.string.no_results_error_message),
-            fontSize = dimensionResource(id = R.dimen.no_results_screen_font_size).value.sp,
-            textAlign = TextAlign.Center
+private fun performQuerySearch(
+    viewModel: SearchScreenViewModel,
+    state: SearchState,
+    emptyString: String
+) {
+    viewModel.getSuggestions()
+    viewModel.updateSearchText(state.query.text)
+    viewModel.insertSuggestion(
+        SuggestionModel(
+            id = currentTimeMillis().toInt(),
+            suggestion = state.query.text
         )
-        Text(
-            text = stringResource(R.string.or_text),
-            textAlign = TextAlign.Center,
-            fontSize = dimensionResource(id = R.dimen.no_results_screen_font_size).value.sp,
-            fontWeight = FontWeight.Bold
-        )
-        Text(
-            text = stringResource(R.string.check_internet_text),
-            fontSize = dimensionResource(id = R.dimen.no_results_screen_font_size).value.sp,
-            textAlign = TextAlign.Center
-        )
-    }
+    )
+    state.query = TextFieldValue(emptyString)
 }
 
 private fun getInitialSuggestions(

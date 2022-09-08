@@ -23,9 +23,10 @@ class SearchState(
         get() = when {
             !focused && query.text.isEmpty() -> SearchDisplay.InitialResults
             focused && query.text.isEmpty() -> SearchDisplay.Suggestions
-            searchResults.itemCount == 0 -> SearchDisplay.NoResults
+            focused && searchResults.itemCount == 0 -> SearchDisplay.NoResults
             searchResults.itemCount > 0 -> SearchDisplay.Results
-            else -> SearchDisplay.Loading
+            searching -> SearchDisplay.Loading
+            else -> SearchDisplay.InitialResults
         }
 
     override fun toString(): String {

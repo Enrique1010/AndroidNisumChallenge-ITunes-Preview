@@ -5,6 +5,7 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.icons.Icons
@@ -28,9 +29,9 @@ fun SearchBar(
     query: TextFieldValue,
     onQueryChange: (TextFieldValue) -> Unit,
     onSearchFocusChange: (Boolean) -> Unit,
-    searchByQuery: () -> Unit,
+    searchByQuery: (String) -> Unit,
     onBack: () -> Unit,
-    searching: Boolean,
+    onKeyBoardAction: KeyboardActionScope.() -> Unit,
     focused: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -61,7 +62,7 @@ fun SearchBar(
             onQueryChange,
             onSearchFocusChange,
             searchByQuery,
-            searching,
+            onKeyBoardAction,
             focused,
             modifier.weight(1f)
         )

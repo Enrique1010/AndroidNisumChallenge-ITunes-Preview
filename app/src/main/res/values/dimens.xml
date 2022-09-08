@@ -15,9 +15,9 @@
     <dimen name="search_text_field_surface_height">56dp</dimen>
     <dimen name="search_text_field_surface_padding_8">8dp</dimen>
     <dimen name="search_text_field_surface_padding_16">16dp</dimen>
-    <dimen name="search_text_field_padding_start">16dp</dimen>
+    <dimen name="search_text_field_padding_start">24dp</dimen>
     <dimen name="search_text_field_padding_end">8dp</dimen>
-    <dimen name="search_text_field_padding_16">16dp</dimen>
+    <dimen name="search_text_field_padding_16">24dp</dimen>
     <!--Splash Screen-->
     <dimen name="splash_icon_size">96dp</dimen>
     <dimen name="splash_spacer">4dp</dimen>
