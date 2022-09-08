@@ -2,6 +2,7 @@ package com.erapps.itunespreview.ui.utils
 
 object Constants {
     const val SUGGESTION_LIST_LIMIT = 7
+    const val GRID_AMOUNT_OF_CELLS = 2
     //main navigation
     const val SPLASH_BASE_ROUTE = "splash"
     const val LANDING_PAGE_BASE_ROUTE = "landing_page"

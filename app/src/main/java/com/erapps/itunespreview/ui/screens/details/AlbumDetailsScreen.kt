@@ -247,7 +247,8 @@ fun SongBox(
     Column(
         modifier = modifier
             .clickable { onPlayClicked() }
-            .background(color = MaterialTheme.colors.onSecondary),
+            .background(color = MaterialTheme.colors.onSecondary)
+            .padding(dimensionResource(id = R.dimen.song_box_padding)),
         verticalArrangement = Arrangement.Center
     ) {
         Row(

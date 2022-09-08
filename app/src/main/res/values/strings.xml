@@ -8,7 +8,7 @@
     <!--Search Screen-->
     <string name="search_text_hint">Search…</string>
     <string name="welcome_text">Hi, try search in the bar above.</string>
-    <string name="suggestion_label">\"Suggestions: \"</string>
+    <string name="suggestion_label">Suggestions: </string>
     <string name="no_results_error_message">Oops!, Nothing finded, try search in the bar above and press find icon again.</string>
     <string name="or_text">or</string>
     <string name="check_internet_text">Check your internet connection.</string>

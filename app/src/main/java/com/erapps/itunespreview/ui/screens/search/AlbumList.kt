@@ -23,6 +23,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.erapps.itunespreview.R
 import com.erapps.itunespreview.data.models.Album
+import com.erapps.itunespreview.ui.utils.Constants.GRID_AMOUNT_OF_CELLS
 
 @Composable
 fun AlbumsList(
@@ -33,7 +34,7 @@ fun AlbumsList(
 
     LazyVerticalGrid(
         modifier = modifier,
-        columns = GridCells.Fixed(2),
+        columns = GridCells.Fixed(GRID_AMOUNT_OF_CELLS),
         verticalArrangement = Arrangement.Center,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {

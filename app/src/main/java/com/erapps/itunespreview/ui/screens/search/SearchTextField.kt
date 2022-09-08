@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
@@ -86,12 +87,18 @@ fun SearchTextField(
                             .padding(
                                 top = dimensionResource(id = R.dimen.search_text_field_padding_end),
                                 bottom = dimensionResource(id = R.dimen.search_text_field_padding_end),
-                                start = dimensionResource(id = R.dimen.search_text_field_padding_24),
+                                start = dimensionResource(id = R.dimen.search_text_field_padding_16),
                                 end = dimensionResource(id = R.dimen.search_text_field_padding_end)
                             ),
                         singleLine = true,
                         textStyle = TextStyle(
                             color = MaterialTheme.colors.onBackground
+                        ),
+                        cursorBrush = Brush.sweepGradient(
+                            colors = listOf(
+                                MaterialTheme.colors.primary,
+                                MaterialTheme.colors.primaryVariant
+                            )
                         ),
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
                         keyboardActions = KeyboardActions {
