@@ -1,6 +1,11 @@
 package com.erapps.itunespreview.di
 
 import com.erapps.itunespreview.data.api.service.ITunesApiService
+import com.erapps.itunespreview.data.room.SuggestionsDao
+import com.erapps.itunespreview.data.source.local.search.ISearchLocalDataSource
+import com.erapps.itunespreview.data.source.local.search.ISearchLocalRepository
+import com.erapps.itunespreview.data.source.local.search.SearchLocalDataSource
+import com.erapps.itunespreview.data.source.local.search.SearchLocalRepository
 import com.erapps.itunespreview.data.source.remote.search.ISearchRemoteDataSource
 import com.erapps.itunespreview.data.source.remote.search.ISearchRepository
 import com.erapps.itunespreview.data.source.remote.search.SearchRemoteDataSource
@@ -23,6 +28,23 @@ object SearchModule {
         @IoDispatcher ioDispatcher: CoroutineDispatcher
     ): ISearchRemoteDataSource {
         return SearchRemoteDataSource(iTunesApiService, ioDispatcher)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSearchLocalDataSource(
+        suggestionsDao: SuggestionsDao,
+        @IoDispatcher ioDispatcher: CoroutineDispatcher
+    ): ISearchLocalDataSource {
+        return SearchLocalDataSource(suggestionsDao, ioDispatcher)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSearchLocalRepository(
+        searchLocalDataSource: ISearchLocalDataSource
+    ): ISearchLocalRepository {
+        return SearchLocalRepository(searchLocalDataSource)
     }
 
     @Singleton

@@ -60,7 +60,7 @@ ext{
     activityCompose = '1.5.1'
     pagingCompose = '1.0.0-alpha15'
     roomVersion = "2.4.2"
-    navigationCompose = '2.5.1'
+    navigationCompose = '2.5.2'
 
     // Google
     materialVersion = '1.6.1'
@@ -75,6 +75,9 @@ ext{
 
     //hilt
     hiltCompiler = '1.0.0'
+
+    //room
+    roomVersion = "2.4.3"
 
     //media
     androidxCore = '1.7.0'
@@ -105,11 +108,16 @@ dependencies {
     kapt "com.google.dagger:hilt-android-compiler:$rootProject.hiltVersion"
     kapt "androidx.hilt:hilt-compiler:$hiltCompiler"
     implementation "androidx.hilt:hilt-navigation-compose:$hiltCompiler"
+    //room
+    implementation "androidx.room:room-runtime:$roomVersion"
+    implementation "androidx.room:room-paging:$roomVersion"
+    implementation "androidx.room:room-ktx:$roomVersion"
+    implementation "androidx.room:room-runtime:$roomVersion"
+    kapt "androidx.room:room-compiler:$roomVersion"
     // Google
     implementation "com.google.android.material:material:$materialVersion"
     implementation "com.google.code.gson:gson:$gsonVersion"
     //audio media
-    implementation "androidx.core:core:$androidxCore"
     implementation "androidx.media:media:$media"
     implementation "com.google.android.exoplayer:exoplayer:$exoPlayer"
     implementation "com.google.android.exoplayer:extension-mediasession:$exoPlayerExt"
