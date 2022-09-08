@@ -64,13 +64,13 @@ fun SearchScreen(
                 state.searching = false
                 if (state.query.text.isNotEmpty()) {
                     keyboardController?.hide()
+                    performQuerySearch(viewModel, state)
                 }
-                performQuerySearch(viewModel, state, it)
             },
             onKeyBoardAction = {
                 state.searching = false
                 if (state.query.text.isNotEmpty()) {
-                    performQuerySearch(viewModel, state, "")
+                    performQuerySearch(viewModel, state)
                     keyboardController?.hide()
                 }
             },
@@ -185,8 +185,7 @@ private fun SuggestionsLayout(
 
 private fun performQuerySearch(
     viewModel: SearchScreenViewModel,
-    state: SearchState,
-    emptyString: String
+    state: SearchState
 ) {
     viewModel.getSuggestions()
     viewModel.updateSearchText(state.query.text)
@@ -196,7 +195,6 @@ private fun performQuerySearch(
             suggestion = state.query.text
         )
     )
-    state.query = TextFieldValue(emptyString)
 }
 
 private fun getInitialSuggestions(
