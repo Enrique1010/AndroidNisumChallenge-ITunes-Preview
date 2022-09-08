@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -28,6 +29,7 @@ import com.erapps.itunespreview.ui.screens.search.searchstate.SearchDisplay
 import com.erapps.itunespreview.ui.screens.search.searchstate.SearchState
 import com.erapps.itunespreview.ui.screens.search.searchstate.SuggestionModel
 import com.erapps.itunespreview.ui.screens.search.searchstate.rememberSearchState
+import com.erapps.itunespreview.ui.screens.utils.TestTags.CIRCULAR_PROGRESS_INDICATOR
 import com.erapps.itunespreview.ui.utils.Constants.SUGGESTION_LIST_LIMIT
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -122,11 +124,11 @@ private fun WelcomeScreen() {
 }
 
 @Composable
-private fun LoadingScreen(
+fun LoadingScreen(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize().testTag(CIRCULAR_PROGRESS_INDICATOR),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

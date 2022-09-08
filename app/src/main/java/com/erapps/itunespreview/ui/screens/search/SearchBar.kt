@@ -15,9 +15,11 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.input.TextFieldValue
 import com.erapps.itunespreview.R
+import com.erapps.itunespreview.ui.screens.utils.TestTags.ICON_BUTTON_TAG
 
 @ExperimentalAnimationApi
 @OptIn(ExperimentalComposeUiApi::class)
@@ -44,7 +46,7 @@ fun SearchBar(
         AnimatedVisibility(visible = focused) {
             // Back button
             IconButton(
-                modifier = Modifier.padding(dimensionResource(id = R.dimen.search_bar_icon_button_padding)),
+                modifier = Modifier.padding(dimensionResource(id = R.dimen.search_bar_icon_button_padding)).testTag(ICON_BUTTON_TAG),
                 onClick = {
                     focusManager.clearFocus()
                     keyboardController?.hide()

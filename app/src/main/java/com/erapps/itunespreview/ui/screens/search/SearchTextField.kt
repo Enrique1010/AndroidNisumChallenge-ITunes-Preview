@@ -19,6 +19,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -26,6 +27,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.erapps.itunespreview.R
+import com.erapps.itunespreview.ui.screens.utils.TestTags.SEARCH_BAR_TAG
+import com.erapps.itunespreview.ui.screens.utils.TestTags.TRAILING_ICON_BUTTON_TAG
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -89,7 +92,7 @@ fun SearchTextField(
                                 bottom = dimensionResource(id = R.dimen.search_text_field_padding_end),
                                 start = dimensionResource(id = R.dimen.search_text_field_padding_16),
                                 end = dimensionResource(id = R.dimen.search_text_field_padding_end)
-                            ),
+                            ).testTag(SEARCH_BAR_TAG),
                         singleLine = true,
                         textStyle = TextStyle(
                             color = MaterialTheme.colors.onBackground
@@ -110,7 +113,10 @@ fun SearchTextField(
                     )
 
                     if (query.text.isNotEmpty()) {
-                        IconButton(onClick = searchByQuery) {
+                        IconButton(
+                            modifier = modifier.testTag(TRAILING_ICON_BUTTON_TAG),
+                            onClick = searchByQuery
+                        ) {
                             Icon(
                                 imageVector = Icons.Filled.Search,
                                 contentDescription = null,

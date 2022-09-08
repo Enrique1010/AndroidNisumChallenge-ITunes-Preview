@@ -129,9 +129,10 @@ dependencies {
     //coil
     implementation("io.coil-kt:coil-compose:$coilVersion")
     //Test implementations
+    //Test implementations
     testImplementation "junit:junit:$junitVersion"
-    androidTestImplementation 'com.google.truth:truth:1.1.3'
     androidTestImplementation "androidx.test.ext:junit:$extJunitVersion"
+    androidTestImplementation 'com.google.truth:truth:1.1.3'
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoCoreVersion"
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
