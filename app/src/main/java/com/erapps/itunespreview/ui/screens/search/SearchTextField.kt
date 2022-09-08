@@ -18,10 +18,13 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import com.erapps.itunespreview.R
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -42,12 +45,12 @@ fun SearchTextField(
         modifier = modifier
             .then(
                 Modifier
-                    .height(56.dp)
+                    .height(dimensionResource(id = R.dimen.search_text_field_surface_height))
                     .padding(
-                        top = 8.dp,
-                        bottom = 8.dp,
-                        start = if (!focused) 16.dp else 0.dp,
-                        end = 16.dp
+                        top = dimensionResource(id = R.dimen.search_text_field_surface_padding_8),
+                        bottom = dimensionResource(id = R.dimen.search_text_field_surface_padding_8),
+                        start = if (!focused) dimensionResource(id = R.dimen.search_text_field_surface_padding_16) else 0.dp,
+                        end = dimensionResource(id = R.dimen.search_text_field_surface_padding_16)
                     )
             ),
         color = MaterialTheme.colors.onSecondary,
@@ -61,7 +64,12 @@ fun SearchTextField(
             ) {
 
                 if (query.text.isEmpty()) {
-                    SearchHint(modifier.padding(start = 24.dp, end = 8.dp))
+                    SearchHint(
+                        modifier.padding(
+                            start = dimensionResource(id = R.dimen.search_text_field_padding_start),
+                            end = dimensionResource(id = R.dimen.search_text_field_padding_end)
+                        )
+                    )
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -75,7 +83,12 @@ fun SearchTextField(
                                 onSearchFocusChange(it.isFocused)
                             }
                             .focusRequester(focusRequester)
-                            .padding(top = 9.dp, bottom = 8.dp, start = 24.dp, end = 8.dp),
+                            .padding(
+                                top = dimensionResource(id = R.dimen.search_text_field_padding_end),
+                                bottom = dimensionResource(id = R.dimen.search_text_field_padding_end),
+                                start = dimensionResource(id = R.dimen.search_text_field_padding_24),
+                                end = dimensionResource(id = R.dimen.search_text_field_padding_end)
+                            ),
                         singleLine = true,
                         textStyle = TextStyle(
                             color = MaterialTheme.colors.onBackground
@@ -115,7 +128,7 @@ private fun SearchHint(modifier: Modifier = Modifier) {
     ) {
         Text(
             color = MaterialTheme.colors.onBackground,
-            text = "Search...",
+            text = stringResource(id = R.string.search_text_hint),
         )
     }
 }

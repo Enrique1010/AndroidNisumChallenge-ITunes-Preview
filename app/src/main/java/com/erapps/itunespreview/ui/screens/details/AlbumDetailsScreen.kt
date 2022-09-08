@@ -17,13 +17,15 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.erapps.itunespreview.R
 import com.erapps.itunespreview.data.models.Album
 import com.erapps.itunespreview.data.models.Song
 import com.erapps.itunespreview.ui.screens.media.AudioModel
@@ -46,14 +48,14 @@ fun AlbumDetailsScreen(
 
     BottomSheetScaffold(
         sheetContent = {
-            Box(Modifier.defaultMinSize(minHeight = 1.dp)) {
+            Box(Modifier.defaultMinSize(minHeight = dimensionResource(id = R.dimen.default_min_size))) {
                 if (audioViewModel.audioModel != null) {
                     BottomMediaContent()
                 }
             }
         },
         scaffoldState = scaffoldState,
-        sheetPeekHeight = 0.dp,
+        sheetPeekHeight = dimensionResource(id = R.dimen.details_screen_bottom_sheet_peek_height),
         sheetShape = RectangleShape
     ) {
         DetailsContent(album = album!!, scaffoldState = scaffoldState) {
@@ -67,7 +69,7 @@ fun AlbumDetailsScreen(
     }
 }
 
-//to clear song state on back pressed not only on back press back button
+//to clear song state on back pressed not only on back press button or gesture
 @Composable
 fun BackHandler(enabled: Boolean = true, onBack: () -> Unit) {
     val currentOnBack by rememberUpdatedState(onBack)
@@ -132,21 +134,21 @@ fun DetailsContent(
                     contentScale = ContentScale.Crop
                 )
             }
-            Spacer(modifier = modifier.height(4.dp))
+            Spacer(modifier = modifier.height(dimensionResource(id = R.dimen.details_content_spacer)))
             Column(
-                modifier = modifier.padding(16.dp)
+                modifier = modifier.padding(dimensionResource(id = R.dimen.details_content_column_padding))
             ) {
                 Text(
                     text = album.collectionName,
                     fontWeight = FontWeight.Bold,
-                    fontSize = 20.sp
+                    fontSize = dimensionResource(id = R.dimen.details_content_text_size).value.sp
                 )
                 Text(
                     text = album.artistName,
                     fontWeight = FontWeight.Bold
                 )
             }
-            Spacer(modifier = modifier.height(4.dp))
+            Spacer(modifier = modifier.height(dimensionResource(id = R.dimen.details_content_spacer)))
             SongsList(albumId = album.collectionId.toLong(), scaffoldState = scaffoldState)
         }
     }
@@ -176,12 +178,18 @@ fun SongsList(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Oops!, no music to show.", fontSize = 16.sp)
+            Text(
+                text = stringResource(R.string.no_music_available_text),
+                fontSize = dimensionResource(id = R.dimen.song_list_font_size).value.sp
+            )
         }
         return
     }
     LazyColumn(
-        modifier = modifier.padding(end = 8.dp, start = 8.dp),
+        modifier = modifier.padding(
+            end = dimensionResource(id = R.dimen.song_list_lazy_column_padding),
+            start = dimensionResource(id = R.dimen.song_list_lazy_column_padding)
+        ),
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -201,7 +209,7 @@ fun SongListItem(
 ) {
     val scope = rememberCoroutineScope()
 
-    Spacer(modifier = modifier.height(2.dp))
+    Spacer(modifier = modifier.height(dimensionResource(id = R.dimen.song_list_item_spacer)))
     SongBox(
         collectionName = song.trackName,
         imageUrl = song.artworkUrl100,
@@ -223,7 +231,7 @@ fun SongListItem(
             scaffoldState.bottomSheetState.expand()
         }
     }
-    Spacer(modifier = modifier.height(2.dp))
+    Spacer(modifier = modifier.height(dimensionResource(id = R.dimen.song_list_item_spacer)))
 }
 
 @Composable
@@ -255,8 +263,14 @@ fun SongBox(
                 contentDescription = null,
                 alignment = Alignment.TopCenter,
                 modifier = Modifier
-                    .size(24.dp, 24.dp)
-                    .padding(end = 8.dp, start = 8.dp),
+                    .size(
+                        dimensionResource(id = R.dimen.song_box_image_size),
+                        dimensionResource(id = R.dimen.song_box_image_size)
+                    )
+                    .padding(
+                        end = dimensionResource(id = R.dimen.song_box_image_padding),
+                        start = dimensionResource(id = R.dimen.song_box_image_padding)
+                    ),
                 contentScale = ContentScale.Crop
             )
             Column(
@@ -267,7 +281,11 @@ fun SongBox(
                     text = collectionName,
                     fontWeight = FontWeight.Bold
                 )
-                Text(text = artistName, fontWeight = FontWeight.Bold, fontSize = 10.sp)
+                Text(
+                    text = artistName,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = dimensionResource(id = R.dimen.song_box_text_size).value.sp
+                )
             }
         }
     }

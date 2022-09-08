@@ -11,8 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.Lifecycle
@@ -20,6 +20,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.erapps.itunespreview.R
 import com.erapps.itunespreview.ui.shared.MarqueeText
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
@@ -52,23 +53,30 @@ fun BottomMediaContent(
                 contentDescription = null,
                 alignment = Alignment.TopCenter,
                 modifier = Modifier
-                    .size(24.dp, 24.dp)
-                    .padding(start = 8.dp),
+                    .size(
+                        dimensionResource(id = R.dimen.media_content_icon_size),
+                        dimensionResource(id = R.dimen.media_content_icon_size)
+                    )
+                    .padding(start = dimensionResource(id = R.dimen.media_content_icon_padding_start)),
                 contentScale = ContentScale.Crop
             )
             Column(
-                modifier = modifier.padding(start = 8.dp)
+                modifier = modifier.padding(start = dimensionResource(id = R.dimen.media_content_icon_padding_start))
             ) {
                 song?.displayName?.let {
                     MarqueeText(
                         modifier = modifier.fillMaxWidth(0.8f),
                         text = it,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 12.sp
+                        fontSize = dimensionResource(id = R.dimen.media_content_text_size).value.sp
                     )
                 }
                 song?.artist?.let {
-                    Text(text = it, fontWeight = FontWeight.Bold, fontSize = 10.sp)
+                    Text(
+                        text = it,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = dimensionResource(id = R.dimen.media_content_artist_text_size).value.sp
+                    )
                 }
             }
         }

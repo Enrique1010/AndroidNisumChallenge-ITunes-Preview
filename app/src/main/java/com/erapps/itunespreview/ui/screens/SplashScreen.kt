@@ -1,6 +1,5 @@
 package com.erapps.itunespreview.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
@@ -10,12 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.erapps.itunespreview.R
 import kotlinx.coroutines.delay
@@ -42,16 +40,19 @@ fun Splash(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.Center
         ) {
             Icon(
-                modifier = modifier.size(96.dp, 96.dp),
+                modifier = modifier.size(
+                    dimensionResource(id = R.dimen.splash_icon_size),
+                    dimensionResource(id = R.dimen.splash_icon_size)
+                ),
                 tint = MaterialTheme.colors.onBackground,
                 painter = painterResource(id = R.drawable.ic_music_preview_logo),
-                contentDescription = "splash"
+                contentDescription = null
             )
-            Spacer(modifier = modifier.height(4.dp))
+            Spacer(modifier = modifier.height(dimensionResource(id = R.dimen.splash_spacer)))
             Text(
-                text = "ITunes Preview",
+                text = stringResource(id = R.string.app_name),
                 textAlign = TextAlign.Center,
-                fontSize = 16.sp,
+                fontSize = dimensionResource(id = R.dimen.splash_text_size).value.sp,
                 fontWeight = FontWeight.Bold
             )
         }

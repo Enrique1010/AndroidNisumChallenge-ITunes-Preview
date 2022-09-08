@@ -2,7 +2,10 @@ package com.erapps.itunespreview.ui.screens.search
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,12 +15,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import com.erapps.itunespreview.R
 import com.erapps.itunespreview.data.models.Album
 
 @Composable
@@ -49,10 +53,16 @@ fun AlbumItem(
     val context = LocalContext.current
     Card(
         onClick = { onCardCLick() },
-        shape = RoundedCornerShape(4.dp),
+        shape = RoundedCornerShape(dimensionResource(id = R.dimen.rounder_shape_album_item)),
         modifier = modifier
-            .padding(8.dp)
-            .border(BorderStroke(1.dp, MaterialTheme.colors.surface), shape = Shapes().small)
+            .padding(dimensionResource(R.dimen.padding_card_album_item))
+            .border(
+                BorderStroke(
+                    dimensionResource(id = R.dimen.border_stroke_card_album_item),
+                    MaterialTheme.colors.surface
+                ),
+                shape = Shapes().small
+            )
     ) {
         Column(
             verticalArrangement = Arrangement.Center,

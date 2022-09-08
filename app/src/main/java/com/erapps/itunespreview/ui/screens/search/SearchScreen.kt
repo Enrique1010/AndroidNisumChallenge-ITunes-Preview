@@ -13,11 +13,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -27,6 +28,7 @@ import com.erapps.itunespreview.ui.screens.search.searchstate.SearchDisplay
 import com.erapps.itunespreview.ui.screens.search.searchstate.SearchState
 import com.erapps.itunespreview.ui.screens.search.searchstate.SuggestionModel
 import com.erapps.itunespreview.ui.screens.search.searchstate.rememberSearchState
+import com.erapps.itunespreview.ui.utils.Constants.SUGGESTION_LIST_LIMIT
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.lang.System.currentTimeMillis
@@ -98,19 +100,22 @@ private fun WelcomeScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(dimensionResource(id = R.dimen.welcome_screen_padding)),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(
-            modifier = Modifier.size(96.dp, 96.dp),
+            modifier = Modifier.size(
+                dimensionResource(id = R.dimen.welcome_icon_size),
+                dimensionResource(id = R.dimen.welcome_icon_size)
+            ),
             tint = MaterialTheme.colors.onBackground,
             painter = painterResource(id = R.drawable.ic_music_preview_logo),
-            contentDescription = "welcome"
+            contentDescription = null
         )
         Text(
-            text = "Nothing to show, try search in the bar above.",
-            fontSize = 16.sp,
+            text = stringResource(R.string.welcome_text),
+            fontSize = dimensionResource(id = R.dimen.no_results_screen_font_size).value.sp,
             textAlign = TextAlign.Center
         )
     }
@@ -119,7 +124,7 @@ private fun WelcomeScreen() {
 @Composable
 private fun LoadingScreen(
     modifier: Modifier = Modifier
-){
+) {
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -139,14 +144,14 @@ private fun SuggestionsLayout(
 
     val keyboardController = LocalSoftwareKeyboardController.current
     state.suggestions = viewModel.searchSuggestions.value
-    if (state.suggestions.count() >= 7) {
+    if (state.suggestions.count() >= SUGGESTION_LIST_LIMIT) {
         viewModel.clearSuggestions()
     }
     if (state.suggestions.size > 0) {
         Row(modifier = modifier.fillMaxWidth()) {
             Text(
-                modifier = modifier.padding(8.dp),
-                text = "Suggestions: ",
+                modifier = modifier.padding(dimensionResource(id = R.dimen.suggestion_layout_text_padding)),
+                text = stringResource(R.string.suggestion_label),
                 textAlign = TextAlign.Start,
                 fontWeight = FontWeight.Bold
             )
@@ -164,7 +169,7 @@ private fun SuggestionsLayout(
                 }
             ) {
                 Icon(imageVector = Icons.Default.History, contentDescription = null)
-                Spacer(modifier = Modifier.width(8.dp))
+                Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.suggestion_layout_item_spacer)))
                 Text(text = it.suggestion)
             }
         }
@@ -176,24 +181,24 @@ private fun NoResultsScreen() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(dimensionResource(id = R.dimen.no_results_screen_column_padding)),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Oops!, Nothing finded, try search in the bar above and press find icon again.",
-            fontSize = 16.sp,
+            text = stringResource(R.string.no_results_error_message),
+            fontSize = dimensionResource(id = R.dimen.no_results_screen_font_size).value.sp,
             textAlign = TextAlign.Center
         )
         Text(
-            text = "or",
+            text = stringResource(R.string.or_text),
             textAlign = TextAlign.Center,
-            fontSize = 16.sp,
+            fontSize = dimensionResource(id = R.dimen.no_results_screen_font_size).value.sp,
             fontWeight = FontWeight.Bold
         )
         Text(
-            text = "Check your internet connection.",
-            fontSize = 16.sp,
+            text = stringResource(R.string.check_internet_text),
+            fontSize = dimensionResource(id = R.dimen.no_results_screen_font_size).value.sp,
             textAlign = TextAlign.Center
         )
     }
