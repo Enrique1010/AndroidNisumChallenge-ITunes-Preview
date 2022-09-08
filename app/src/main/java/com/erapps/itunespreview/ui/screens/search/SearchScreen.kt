@@ -10,7 +10,9 @@ import androidx.compose.material.icons.filled.History
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -127,12 +129,15 @@ private fun LoadingScreen(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 private fun SuggestionsLayout(
     modifier: Modifier = Modifier,
     state: SearchState,
     viewModel: SearchScreenViewModel
 ) {
+
+    val keyboardController = LocalSoftwareKeyboardController.current
     state.suggestions = viewModel.searchSuggestions.value
     if (state.suggestions.count() >= 7) {
         viewModel.clearSuggestions()
@@ -154,6 +159,7 @@ private fun SuggestionsLayout(
                 onClick = {
                     viewModel.updateSearchText(it.suggestion)
                     state.query = TextFieldValue(it.suggestion)
+                    keyboardController?.hide()
                     viewModel.getAlbums()
                 }
             ) {

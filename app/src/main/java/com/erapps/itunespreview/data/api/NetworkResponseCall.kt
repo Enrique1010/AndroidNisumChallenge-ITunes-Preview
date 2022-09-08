@@ -26,7 +26,6 @@ internal class NetworkResponseCall<S : Any, E : Any>(
                         body != null -> {
                             callback.onResponse(
                                 this@NetworkResponseCall,
-                                //Todo convert body from txt to json
                                 Response.success(NetworkResponse.Success(body))
                             )
                         }

@@ -1,5 +1,7 @@
 package com.erapps.itunespreview.ui.screens.details
 
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -8,15 +10,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -40,7 +40,7 @@ fun AlbumDetailsScreen(
     audioViewModel: AudioViewModel = viewModel(),
     onPopup: () -> Unit
 ) {
-    //val scaffoldState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+
     val scaffoldState = rememberBottomSheetScaffoldState()
     val album = sharedViewModel.album
 
@@ -53,7 +53,7 @@ fun AlbumDetailsScreen(
             }
         },
         scaffoldState = scaffoldState,
-        //scrimColor = Color.Transparent,
+        sheetPeekHeight = 0.dp,
         sheetShape = RectangleShape
     ) {
         DetailsContent(album = album!!, scaffoldState = scaffoldState) {
@@ -61,25 +61,32 @@ fun AlbumDetailsScreen(
             onPopup()
         }
     }
+    BackHandler {
+        audioViewModel.clearSong()
+        onPopup()
+    }
+}
 
-    //to handle clear media player when sheet is hide and initialize when is expanded
-    LaunchedEffect(scaffoldState.bottomSheetState.currentValue) {
-        /*when (scaffoldState.bottomSheetState.currentValue) {
-            BottomSheetValue.Collapsed -> {
-                if (audioViewModel.audioModel != null) {
-                    audioViewModel.clearSong()
-                }
+//to clear song state on back pressed not only on back press back button
+@Composable
+fun BackHandler(enabled: Boolean = true, onBack: () -> Unit) {
+    val currentOnBack by rememberUpdatedState(onBack)
+    val backCallback = remember {
+        object : OnBackPressedCallback(enabled) {
+            override fun handleOnBackPressed() {
+                currentOnBack()
             }
-            else -> {}
-        }*/
-        /*when (scaffoldState.currentValue) {
-            ModalBottomSheetValue.Hidden -> {
-                if (audioViewModel.audioModel != null) {
-                    audioViewModel.clearSong()
-                }
-            }
-            else -> {}
-        }*/
+        }
+    }
+    SideEffect { backCallback.isEnabled = enabled }
+    val backDispatcher =
+        checkNotNull(LocalOnBackPressedDispatcherOwner.current) {}.onBackPressedDispatcher
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner, backDispatcher) {
+        backDispatcher.addCallback(lifecycleOwner, backCallback)
+        onDispose {
+            backCallback.remove()
+        }
     }
 }
 

@@ -37,11 +37,7 @@ fun BottomMediaContent(
     val player = song?.let { generatePlayer(viewModel, it.url) }
     val playerView = rememberPlayerViewWithLifecycle { currentPosition = it }
 
-    Column(
-        modifier = modifier.background(
-            color = Color.Transparent/*if (viewModel.audioModel == null) Color.Transparent else MaterialTheme.colors.background*/
-        )
-    ) {
+    Column {
         Row(
             modifier = modifier
                 .fillMaxWidth()
