@@ -9,11 +9,6 @@ App to consume the iTunes API to search and play songs by term. App made with Je
 
 ![flow3](https://user-images.githubusercontent.com/42783065/189199578-d3119c1e-e5b3-4817-82da-98bcc24f8651.jpeg)
 
-# No native libraries used
-
-- [Truth](https://truth.dev/) for better assertions in testing.
-- [Retrofit 2](https://square.github.io/retrofit/) to handle API calls easily.
-- [Coil](https://coil-kt.github.io/coil/compose/) provides an AsyncImage component to handle images from URLs easily.
 
 # Challenge Objectives
 
@@ -24,8 +19,6 @@ App to consume the iTunes API to search and play songs by term. App made with Je
 - Store the searches carried out locally and offer to repeat them in case of not having an internet connection. ✓
 - Handle 500 errors, "term not found", INET_CONN_ERROR (handle it using NetworkResponse and return and empty list instead). ✓
 - Use animations and transitions between views (not completed, explanation below).
-
-
 
 # Issues Found During the Challenge
 
@@ -39,6 +32,12 @@ App to consume the iTunes API to search and play songs by term. App made with Je
 - Without page number in the API request, the only way to perform a pagination is increasing the limit when the end scroll is reached, that could be inefficient for the phone's performance (I implemented paging source without pagination as a solution).
 - This can be solved by installing [ACCompanist Animation Navigation](https://google.github.io/accompanist/navigation-animation) which provides animated composables, but it's a beta and in some instances (as in this case), it doesn't work properly.
 - The duration is handled by exoplayer, if you want to create a custom media player that can process the duration of the media object, exoplayer extracts the song's metadata, which contains the duration.
+
+# No native libraries used
+
+- [Truth](https://truth.dev/) for better assertions in testing.
+- [Retrofit 2](https://square.github.io/retrofit/) to handle API calls easily.
+- [Coil](https://coil-kt.github.io/coil/compose/) provides an AsyncImage component to handle images from URLs easily.
 
 # Test Cases
 
