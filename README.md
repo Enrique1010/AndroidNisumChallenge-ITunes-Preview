@@ -1,6 +1,20 @@
 # AndroidNisumChallenge ITunes Preview App
 App to consume the iTunes API to search and play songs by term. App made with Jetpack compose.
 
+# Application Screenshots
+
+![flow1](https://user-images.githubusercontent.com/42783065/189199478-39553be2-17ec-4673-a5cb-67910247d91e.jpeg)
+
+![flow2](https://user-images.githubusercontent.com/42783065/189199564-b0cf819c-5d92-475d-81ec-4d82e7ec3ad7.jpeg)
+
+![flow3](https://user-images.githubusercontent.com/42783065/189199578-d3119c1e-e5b3-4817-82da-98bcc24f8651.jpeg)
+
+# No native libraries used
+
+- [Truth](https://truth.dev/) for better assertions in testing.
+- [Retrofit 2](https://square.github.io/retrofit/) to handle API calls easily.
+- [Coil](https://coil-kt.github.io/coil/compose/) provides an AsyncImage component to handle images from URLs easily.
+
 # Challenge Objectives
 
 - Build song search engines using [ITunes Search Api](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/Searching.html#//apple_ref/doc/uid/TP40017632-CH5-SW1) ✓
@@ -25,21 +39,6 @@ App to consume the iTunes API to search and play songs by term. App made with Je
 - Without page number in the API request, the only way to perform a pagination is increasing the limit when the end scroll is reached, that could be inefficient for the phone's performance (I implemented paging source without pagination as a solution).
 - This can be solved by installing [ACCompanist Animation Navigation](https://google.github.io/accompanist/navigation-animation) which provides animated composables, but it's a beta and in some instances (as in this case), it doesn't work properly.
 - The duration is handled by exoplayer, if you want to create a custom media player that can process the duration of the media object, exoplayer extracts the song's metadata, which contains the duration.
-
-
-# Application Screenshots
-
-![flow1](https://user-images.githubusercontent.com/42783065/189199478-39553be2-17ec-4673-a5cb-67910247d91e.jpeg)
-
-![flow2](https://user-images.githubusercontent.com/42783065/189199564-b0cf819c-5d92-475d-81ec-4d82e7ec3ad7.jpeg)
-
-![flow3](https://user-images.githubusercontent.com/42783065/189199578-d3119c1e-e5b3-4817-82da-98bcc24f8651.jpeg)
-
-# No native libraries used
-
-- [Truth](https://truth.dev/) for better assertions in testing.
-- [Retrofit 2](https://square.github.io/retrofit/) to handle API calls easily.
-- [Coil](https://coil-kt.github.io/coil/compose/) provides an AsyncImage component to handle images from URLs easily.
 
 # Test Cases
 
