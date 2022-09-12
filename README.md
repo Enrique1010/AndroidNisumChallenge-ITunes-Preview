@@ -45,6 +45,10 @@ App to consume the iTunes API to search and play songs by term. App made with Je
 - Testing Room database - tested all methods to read/write room database.
 - Testing Loading Screen - tested if loading is displayed.
 
+# Bugs
+
+- Black screen while app's starting on android 12, this is because default splash screen on android 12. If you have this problem "for now" just click on black screen.
+
 # Used Devices for testing
 
 - One Plus 7T - Android 11 (Physical)
