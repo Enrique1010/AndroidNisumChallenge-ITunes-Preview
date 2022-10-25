@@ -1,4 +1,4 @@
-# AndroidNisumChallenge ITunes Preview App
+# ITunes Preview App
 App to consume the iTunes API to search and play songs by term. App made with Jetpack compose.
 
 # Application Screenshots
